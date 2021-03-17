@@ -5,6 +5,7 @@ import 'package:file/local.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 
+// ignore: avoid_classes_with_only_static_members
 class AudioRecorder {
   static const MethodChannel _channel = const MethodChannel('audio_recorder');
 
@@ -12,7 +13,7 @@ class AudioRecorder {
   static LocalFileSystem fs = LocalFileSystem();
 
   static Future start(
-      {String path, AudioOutputFormat audioOutputFormat}) async {
+      {String? path, AudioOutputFormat? audioOutputFormat}) async {
     String extension;
     if (path != null) {
       if (audioOutputFormat != null) {
@@ -45,7 +46,7 @@ class AudioRecorder {
   }
 
   static Future<Recording> stop() async {
-    Map<String, Object> response =
+    var response =
         Map.from(await _channel.invokeMethod('stop'));
     Recording recording = new Recording(
         duration: new Duration(milliseconds: response['duration']),
@@ -66,7 +67,7 @@ class AudioRecorder {
     return hasPermission;
   }
 
-  static AudioOutputFormat _convertStringInAudioOutputFormat(String extension) {
+  static AudioOutputFormat? _convertStringInAudioOutputFormat(String extension) {
     switch (extension) {
       case ".wav":
         return AudioOutputFormat.WAV;
@@ -108,13 +109,13 @@ enum AudioOutputFormat { AAC, WAV }
 
 class Recording {
   // File path
-  String path;
+  String? path;
   // File extension
-  String extension;
+  String? extension;
   // Audio duration in milliseconds
-  Duration duration;
+  Duration? duration;
   // Audio output format
-  AudioOutputFormat audioOutputFormat;
+  AudioOutputFormat? audioOutputFormat;
 
   Recording({this.duration, this.path, this.audioOutputFormat, this.extension});
 }
